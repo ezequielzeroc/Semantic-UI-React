@@ -76,7 +76,7 @@ jobs:
           command: yarn build
       - run:
           name: Cypress run
-          command: start-server-and-test './node_modules/.bin/serve -p 3000' 3000 './node_modules/.bin/percy exec -- ./node_modules/.bin/cypress run'
+          command: yarn start-server-and-test './node_modules/.bin/serve -p 3000' 3000 './node_modules/.bin/percy exec -- ./node_modules/.bin/cypress run'
 
 workflows:
   version: 2
