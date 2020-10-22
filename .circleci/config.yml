@@ -32,7 +32,6 @@ jobs:
           key: v4-node-{{ .Branch }}-{{ checksum "yarn.lock" }}
           paths:
             - .cache/yarn
-            - .cache/Cypress
       - persist_to_workspace:
           root: ~/
           paths:
@@ -73,7 +72,9 @@ jobs:
           at: ~/
       - run:
           name: Build
-          command: yarn build
+          command: yarn build:docs
+          environment:
+            STAGING: true
       - run:
           name: Cypress run
           command: yarn start-server-and-test './node_modules/.bin/serve -p 3000' 3000 './node_modules/.bin/percy exec -- ./node_modules/.bin/cypress run'
