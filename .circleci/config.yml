@@ -18,6 +18,9 @@ restore_node_modules: &restore_node_modules
       - v3-node-{{ .Branch }}-
       - v3-node-
 
+orbs:
+  percy: percy/agent@0.1.2
+
 jobs:
   bootstrap:
     <<: *docker_defaults
@@ -74,6 +77,19 @@ jobs:
           name: Lint
           command: yarn lint
 
+  cypress:
+    <<: *docker_defaults
+    steps:
+      - attach_workspace:
+          at: ~/project
+      - *restore_node_modules
+      - run:
+          name: Build
+          command: yarn build
+      - run:
+          name: Cypress run
+          command: start-server-and-test './node_modules/.bin/serve -p 3000' 3000 './node_modules/.bin/percy exec -- ./node_modules/.bin/cypress run'
+
 workflows:
   version: 2
   main:
@@ -85,3 +101,9 @@ workflows:
       - lint:
           requires:
             - bootstrap
+      - cypress:
+          requires:
+            - bootstrap
+      - percy/finalize_all:
+          requires:
+            - cypress
