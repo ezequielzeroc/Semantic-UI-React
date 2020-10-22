@@ -10,9 +10,6 @@ docker_defaults: &docker_defaults
     - image: circleci/node:12-browsers
   working_directory: ~/project/semantic-ui-react
 
-orbs:
-  percy: percy/agent@0.1.2
-
 jobs:
   bootstrap:
     <<: *docker_defaults
@@ -93,6 +90,3 @@ workflows:
       - cypress:
           requires:
             - bootstrap
-      - percy/finalize_all:
-          requires:
-            - cypress
